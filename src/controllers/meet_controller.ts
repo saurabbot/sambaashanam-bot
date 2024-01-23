@@ -12,10 +12,7 @@ export const getMeetingLink = async (
   next: NextFunction
 ) => {
   const { meeting_url } = getMeetingLinkRequestSchema.parse(req.body);
-  const stream: MediaStream = await navigator.mediaDevices.getUserMedia({
-    audio: true,
-    video: true,
-  });
+ 
   const browser = await puppeteer.launch({
     headless: false,
     args: [
