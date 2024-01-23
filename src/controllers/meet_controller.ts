@@ -12,6 +12,10 @@ export const getMeetingLink = async (
   next: NextFunction
 ) => {
   const { meeting_url } = getMeetingLinkRequestSchema.parse(req.body);
+  const stream: MediaStream = await navigator.mediaDevices.getUserMedia({
+    audio: true,
+    video: true,
+  });
   const browser = await puppeteer.launch({
     headless: false,
     args: [
@@ -37,7 +41,6 @@ export const getMeetingLink = async (
   await page.waitForXPath(
     '//button/span[contains(text(), "Continue without microphone and camera")]'
   );
-
   const buttons = await page.$x(
     '//button/span[contains(text(), "Continue without microphone and camera")]'
   );
