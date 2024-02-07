@@ -1,0 +1,42 @@
+# Node.js
+node_modules/
+.yarn-integrity
+
+# Logs
+logs/
+*.log
+
+# Dependency directories
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Build output
+dist/
+build/
+out/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Mac files
+.DS_Store
+
+# Windows files
+Thumbs.db
+node_modules/.yarn-integrity
