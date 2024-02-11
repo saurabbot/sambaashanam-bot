@@ -17,6 +17,7 @@
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-adblocker": "^2.13.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "puppeteer-screen-recorder": "^2.1.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3",
     "zod": "^3.22.4"

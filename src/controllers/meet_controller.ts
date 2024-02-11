@@ -2,6 +2,10 @@ import { NextFunction, Request, Response } from "express";
 import { z } from "zod";
 const puppeteer = require("puppeteer-extra");
 const StealthPlugin = require("puppeteer-extra-plugin-stealth");
+import {
+  PuppeteerScreenRecorder,
+  PuppeteerScreenRecorderOptions,
+} from "puppeteer-screen-recorder";
 puppeteer.use(StealthPlugin());
 const getMeetingLinkRequestSchema = z.object({
   meeting_url: z.string().url(),
@@ -12,7 +16,7 @@ export const getMeetingLink = async (
   next: NextFunction
 ) => {
   const { meeting_url } = getMeetingLinkRequestSchema.parse(req.body);
- 
+
   const browser = await puppeteer.launch({
     headless: false,
     args: [
@@ -29,6 +33,14 @@ export const getMeetingLink = async (
     waitUntil: "networkidle0",
     timeout: 120000,
   });
+  const recorder = new PuppeteerScreenRecorder(page);
+  await recorder.start("./report/video/meeting.mp4");
+
+  // Wait for 5 seconds (or however long you want to record)
+  await new Promise((resolve) => setTimeout(resolve, 5000));
+
+  // Stop recording
+  
   const context = browser.defaultBrowserContext();
   await context.overridePermissions("https://meet.google.com/", [
     "microphone",
@@ -59,7 +71,10 @@ export const getMeetingLink = async (
   );
   await page.waitForTimeout(20000);
   const screenshotBuffer = await page.screenshot();
+  await recorder.stop();
+
   await browser.close();
+
   res.setHeader("Content-Type", "image/png");
   res.send(screenshotBuffer);
 };
