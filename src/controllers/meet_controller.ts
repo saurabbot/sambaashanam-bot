@@ -33,14 +33,16 @@ export const getMeetingLink = async (
     waitUntil: "networkidle0",
     timeout: 120000,
   });
-  const recorder = new PuppeteerScreenRecorder(page);
-  await recorder.start("./report/video/meeting.mp4");
+  const screenRecorderOptions: PuppeteerScreenRecorderOptions = {
+    fps: 90,
+    followNewTab: true,
+  };
+  const recorder = new PuppeteerScreenRecorder(page,screenRecorderOptions);
 
-  // Wait for 5 seconds (or however long you want to record)
   await new Promise((resolve) => setTimeout(resolve, 5000));
 
   // Stop recording
-  
+
   const context = browser.defaultBrowserContext();
   await context.overridePermissions("https://meet.google.com/", [
     "microphone",
@@ -69,6 +71,7 @@ export const getMeetingLink = async (
   await page.click(
     `button[class="VfPpkd-LgbsSe VfPpkd-LgbsSe-OWXEXe-k8QpJ VfPpkd-LgbsSe-OWXEXe-dgl2Hf nCP5yc AjY5Oe DuMIQc LQeN7 jEvJdc QJgqC"]`
   );
+  await recorder.start("./report/video/meeting.mp4");
   await page.waitForTimeout(20000);
   const screenshotBuffer = await page.screenshot();
   await recorder.stop();
